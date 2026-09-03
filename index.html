@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+  <meta name="theme-color" content="#090d16" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <title>Quiz Especial de Aniversário ✨ | Parabéns Rafa!</title>
+  
+  <!-- Meta tags sociais para quando compartilhar o link -->
+  <meta name="description" content="Um quiz especial e interativo para comemorar o aniversário da melhor prima do mundo!" />
+  <meta property="og:title" content="Quiz Especial de Aniversário ✨ | Parabéns Rafa!" />
+  <meta property="og:description" content="Descubra o quanto você lembra dos nossos momentos, histórias e zoeiras!" />
+  <meta property="og:type" content="website" />
+  
+  <!-- Google Fonts: Outfit (Títulos), Plus Jakarta Sans (Texto limpo) e Caveat (Polaroid/Letter) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Outfit:wght@400;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  
+  <!-- Canvas Confetti CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
+
+  <!-- Estilos Customizados -->
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- Canvas de Fundo com Partículas e Brilhos -->
+  <canvas id="bg-canvas"></canvas>
+
+  <!-- Luzes de Fundo Aurora -->
+  <div class="aurora-bg">
+    <div class="aurora-blob aurora-blob-1"></div>
+    <div class="aurora-blob aurora-blob-2"></div>
+    <div class="aurora-blob aurora-blob-3"></div>
+  </div>
+
+  <!-- Container Geral da Aplicação -->
+  <main class="app-container">
+
+    <!-- Top Navigation Bar -->
+    <header class="top-nav">
+      <div class="nav-brand" id="btn-go-home">
+        <span class="sparkle">✨</span>
+        <span>Quiz da <span class="dynamic-name">Rafa</span></span>
+      </div>
+      <div class="nav-actions">
+        <button class="btn-icon-pill" id="btn-toggle-sound" title="Alternar Som">🔊</button>
+      </div>
+    </header>
+
+    <!-- ====================================================================
+         1. TELA INICIAL (HERO / HOME)
+         ==================================================================== -->
+    <section id="screen-home" class="view-screen active">
+      <div class="hero-section">
+        
+        <!-- Conteúdo Textual e Ações -->
+        <div class="hero-content">
+          <div class="badge-tag">
+            <span>🎂</span>
+            <span>Edição Especial de Aniversário</span>
+          </div>
+
+          <h1 class="hero-title">
+            O Grande Quiz da <span class="gradient-text dynamic-name">Rafa</span>!
+          </h1>
+
+          <p class="hero-subtitle">
+            Chegou o momento da verdade! Será que você realmente se lembra das nossas histórias, resenhas e dos momentos mais marcantes?
+          </p>
+
+          <!-- Estatísticas Festivas -->
+          <div class="hero-stats">
+            <div class="stat-card">
+              <div class="stat-icon">📸</div>
+              <div class="stat-value">100+</div>
+              <div class="stat-label">Memórias</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-icon">❓</div>
+              <div class="stat-value">10</div>
+              <div class="stat-label">Desafios</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-icon">👑</div>
+              <div class="stat-value">1º Lugar</div>
+              <div class="stat-label">Prima do Ano</div>
+            </div>
+          </div>
+
+          <!-- Botões Principais -->
+          <div class="hero-buttons">
+            <button class="btn-primary-mega" id="btn-start-quiz">
+              <span>COMEÇAR O QUIZ</span>
+              <span style="font-size: 1.4rem;">🚀</span>
+            </button>
+            <div class="hero-actions-sub">
+              <button class="btn-glass" id="btn-go-gallery">
+                <span>📸 Ver Álbum de Fotos</span>
+              </button>
+              <button class="btn-glass" id="btn-open-letter-direct">
+                <span>💌 Carta de Parabéns</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Showcase Visual: Pilha de Polaroids 3D Interativa -->
+        <div class="hero-visual">
+          <div class="polaroid-stack-container" id="polaroid-stack">
+            <!-- Gerado dinamicamente via JS -->
+          </div>
+          <div class="stack-hint">
+            <span>👉 Toque nas fotos para alternar</span>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ====================================================================
+         2. TELA DO QUIZ (PERGUNTAS & FEEDBACK)
+         ==================================================================== -->
+    <section id="screen-quiz" class="view-screen">
+      <div class="quiz-container">
+
+        <!-- Barra de Progresso e Status -->
+        <div class="quiz-header">
+          <div class="quiz-header-top">
+            <div class="quiz-progress-text" id="quiz-counter">
+              Pergunta 1 de 10
+            </div>
+            <div class="quiz-streak-badge" id="quiz-streak">
+              <span>Streak:</span>
+              <span id="quiz-streak-value">0 🔥</span>
+            </div>
+          </div>
+          <div class="progress-bar-container">
+            <div class="progress-bar-fill" id="quiz-progress-bar"></div>
+          </div>
+        </div>
+
+        <!-- Card Principal da Pergunta -->
+        <div class="quiz-card">
+
+          <!-- Foto em Destaque no estilo Polaroid -->
+          <div class="quiz-media-wrapper" title="Clique para ampliar">
+            <img id="quiz-photo" class="quiz-photo" src="" alt="Foto da pergunta" />
+            <div class="quiz-photo-zoom-hint">
+              <span>🔍 Toque para ampliar a foto</span>
+            </div>
+          </div>
+
+          <!-- Texto da Pergunta -->
+          <h2 class="quiz-question-title" id="quiz-question-title">
+            Carregando pergunta...
+          </h2>
+
+          <!-- Botão de Dica -->
+          <div class="hint-toggle-container">
+            <button class="btn-hint" id="btn-hint">
+              <span>💡 Ver Dica Secreta</span>
+            </button>
+          </div>
+          <div class="hint-box" id="hint-box"></div>
+
+          <!-- Grade de Opções (A, B, C, D) -->
+          <div class="options-grid" id="options-grid">
+            <!-- Opções renderizadas via JS -->
+          </div>
+
+          <!-- Caixa de Feedback e Historieta pós-resposta -->
+          <div class="quiz-feedback-box" id="quiz-feedback-box">
+            <!-- Injetado dinamicamente via JS -->
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ====================================================================
+         3. TELA DE RESULTADOS (FINAL & HOMENAGEM)
+         ==================================================================== -->
+    <section id="screen-results" class="view-screen">
+      <div class="results-container">
+
+        <!-- Card do Troféu e Pontuação -->
+        <div class="trophy-card">
+          <div class="trophy-badge-icon" id="trophy-icon">👑</div>
+          <h2 class="results-title">Quiz Concluído!</h2>
+          <div class="score-display" id="final-score">10 / 10</div>
+          <div class="results-rank-pill" id="results-rank">PRIMA LENDÁRIA!</div>
+          <p class="results-description" id="results-desc">
+            Você é simplesmente espetacular! Lembrou de cada detalhe e provou que nossa parceria é imbatível!
+          </p>
+        </div>
+
+        <!-- Envelope e Carta de Aniversário Especial -->
+        <div class="letter-section">
+          <div class="envelope-card" id="envelope-card">
+            <div class="envelope-icon">💌</div>
+            <h3 class="envelope-title">Você tem uma Carta de Aniversário Especial!</h3>
+            <p class="envelope-subtitle">Toque aqui para abrir a mensagem secreta ✨</p>
+          </div>
+
+          <div class="letter-content-box" id="letter-content">
+            <!-- Preenchido via JS com o texto do questions.js -->
+          </div>
+        </div>
+
+        <!-- Botões de Ação Finais -->
+        <div class="results-actions">
+          <a class="btn-whatsapp" id="btn-whatsapp" href="#" target="_blank" rel="noopener noreferrer">
+            <span>💬 Mandar no WhatsApp</span>
+          </a>
+          <button class="btn-glass" id="btn-results-gallery">
+            <span>📸 Explorar Todas as Fotos</span>
+          </button>
+          <button class="btn-glass" id="btn-restart-quiz">
+            <span>🔄 Jogar Novamente</span>
+          </button>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ====================================================================
+         4. TELA DA GALERIA DE MEMÓRIAS (MURAL COMPLETO)
+         ==================================================================== -->
+    <section id="screen-gallery" class="view-screen">
+      <div class="gallery-container">
+        
+        <div class="gallery-header">
+          <h2 class="gallery-title">
+            Nosso <span class="gradient-text">Baú de Memórias</span> 🎞️
+          </h2>
+          <p class="gallery-subtitle">
+            Cada clique guarda uma história, uma gargalhada e momentos inesquecíveis que construímos juntos!
+          </p>
+          <div style="margin-top: 1.25rem;">
+            <button class="btn-glass" id="btn-gallery-back">
+              <span>⬅️ Voltar ao Início</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Grid com Todas as Fotos -->
+        <div class="gallery-grid" id="gallery-grid">
+          <!-- Fotos renderizadas via JS -->
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Modal Lightbox (Visualizador em Tela Cheia) -->
+  <div class="lightbox-modal" id="lightbox-modal">
+    <div class="lightbox-content">
+      <button class="lightbox-close-btn" id="lightbox-close" title="Fechar">✕</button>
+      <img class="lightbox-img" id="lightbox-img" src="" alt="Foto em alta resolução" />
+      <div style="color: #cbd5e1; font-family: var(--font-hand); font-size: 1.4rem; margin-top: 10px;" id="lightbox-caption"></div>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="questions.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
